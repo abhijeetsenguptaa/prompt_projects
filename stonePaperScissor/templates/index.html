@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Rock Paper Scissors</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        margin-top: 50px;
+      }
+
+      h1 {
+        color: #333;
+      }
+
+      form {
+        margin-top: 30px;
+      }
+
+      select {
+        padding: 8px;
+        font-size: 16px;
+      }
+
+      input[type="submit"] {
+        background-color: #4caf50;
+        color: white;
+        padding: 10px 20px;
+        font-size: 16px;
+        border: none;
+        cursor: pointer;
+      }
+
+      p {
+        font-size: 18px;
+        margin-bottom: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Welcome to Rock Paper Scissors!</h1>
+    <form action="/" method="POST">
+      <label for="choice">Choose: </label>
+      <select name="choice" id="choice">
+        <option value="rock">Rock</option>
+        <option value="paper">Paper</option>
+        <option value="scissors">Scissors</option>
+      </select>
+      <br /><br />
+      <input type="submit" value="Play" />
+    </form>
+    <br />
+    {% if result %}
+    <p>{{ result }}</p>
+    {% endif %} {% if score %}
+    <p>
+      Current Score - You: {{ score["user_wins"] }}, Computer: {{
+      score["computer_wins"] }}
+    </p>
+    {% endif %}
+  </body>
+</html>
