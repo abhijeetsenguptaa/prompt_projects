@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Orders</title>
+    <style>
+        /* CSS styling for the table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        /* CSS styling for the edit form */
+        .edit-form-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 9999;
+        }
+
+        .edit-form {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 400px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .edit-form h2 {
+            margin-top: 0;
+        }
+
+        .edit-form input[type="text"],
+        .edit-form input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .edit-form button {
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .edit-form button.cancel {
+            background-color: #ccc;
+        }
+        #navBar{
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+    </style>
+</head>
+<body>
+    <div id="navBar">
+        <a href="/"><h4>HOME</h4></a>
+        <a href="/menu"><h4>MENU</h4></a>
+        <a href="/orders"><h4>ORDERS</h4></a>
+        <a href="/add_dish"><h4>ADD DISH</h4></a>
+    </div>
+    <h1>Orders</h1>
+    <table>
+        <tr>
+            <th>Item Name</th>
+            <th>Quantity</th>
+            <th>Total Price</th>
+            <th>Customer Name</th>
+            <th>Status</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+        {% for order in orders %}
+        <tr>
+            <td>{{ order.item_name }}</td>
+            <td>{{ order.quantity }}</td>
+            <td>{{ order.total_price }}</td>
+            <td>{{ order.name }}</td>
+            <td>{{ order.status }}</td>
+            <td>
+                <button class="edit-btn" onclick="showEditForm('{{ order._id }}', '{{ order.item_name }}', '{{ order.quantity }}', '{{ order.total_price }}', '{{ order.name }}', '{{ order.status }}')">Edit</button>
+            </td>
+            <td>
+                <form action="/delete_order" method="post">
+                    <input type="hidden" name="id" value="{{ order._id }}">
+                    <button type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <div class="edit-form-container">
+        <div class="edit-form">
+            <h2>Edit Order</h2>
+            <form action="/update_order" method="post">
+                <input type="hidden" name="id" id="edit-form-id">
+                <label for="edit-form-item-name">Item Name:</label>
+                <input type="text" name="item_name" id="edit-form-item-name" required>
+                <label for="edit-form-quantity">Quantity:</label>
+                <input type="number" name="quantity" id="edit-form-quantity" required>
+                <label for="edit-form-total-price">Total Price:</label>
+                <input type="number" name="total_price" id="edit-form-total-price" required>
+                <label for="edit-form-customer-name">Customer Name:</label>
+                <input type="text" name="name" id="edit-form-customer-name" required>
+                <label for="edit-form-status">Status:</label>
+                <input type="text" name="status" id="edit-form-status" required>
+                <button type="submit">Save</button>
+                <button type="button" class="cancel" onclick="hideEditForm()">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function showEditForm(id, item_name, quantity, total_price, customer_name, status) {
+            // Set values for the edit form fields
+            document.getElementById('edit-form-id').value = id;
+            document.getElementById('edit-form-item-name').value = item_name;
+            document.getElementById('edit-form-quantity').value = quantity;
+            document.getElementById('edit-form-total-price').value = total_price;
+            document.getElementById('edit-form-customer-name').value = customer_name;
+            document.getElementById('edit-form-status').value = status;
+
+            // Show the edit form
+            var editFormContainer = document.querySelector('.edit-form-container');
+            editFormContainer.style.display = 'block';
+        }
+
+        function hideEditForm() {
+            // Hide the edit form
+            var editFormContainer = document.querySelector('.edit-form-container');
+            editFormContainer.style.display = 'none';
+        }
+    </script>
+</body>
+</html>
